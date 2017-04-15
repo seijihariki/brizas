@@ -1,0 +1,328 @@
+{
+  "metadata": {
+    "provider": "Oxford University Press"
+  },
+  "results": [
+    {
+      "id": "test",
+      "language": "en",
+      "lexicalEntries": [
+        {
+          "entries": [
+            {
+              "etymologies": [
+                "late Middle English (denoting a cupel used to treat gold or silver alloys or ore): via Old French from Latin testu, testum ‘earthen pot’, variant of testa ‘jug, shell’. Compare with test. The verb dates from the early 17th century"
+              ],
+              "grammaticalFeatures": [
+                {
+                  "text": "Singular",
+                  "type": "Number"
+                }
+              ],
+              "homographNumber": "100",
+              "senses": [
+                {
+                  "definitions": [
+                    "a procedure intended to establish the quality, performance, or reliability of something, especially before it is taken into widespread use"
+                  ],
+                  "examples": [
+                    {
+                      "text": "both countries carried out nuclear tests in May"
+                    },
+                    {
+                      "text": "four fax modems are on test"
+                    }
+                  ],
+                  "id": "m_en_gbus1042280.006",
+                  "subsenses": [
+                    {
+                      "definitions": [
+                        "a short written or spoken examination of a person's proficiency or knowledge"
+                      ],
+                      "examples": [
+                        {
+                          "text": "a spelling test"
+                        }
+                      ],
+                      "id": "m_en_gbus1042280.009"
+                    },
+                    {
+                      "definitions": [
+                        "an event or situation that reveals the strength or quality of someone or something by putting them under strain"
+                      ],
+                      "examples": [
+                        {
+                          "text": "this is the first serious test of the peace agreement"
+                        }
+                      ],
+                      "id": "m_en_gbus1042280.010"
+                    },
+                    {
+                      "definitions": [
+                        "an examination of part of the body or a body fluid for medical purposes, especially by means of a chemical or mechanical procedure rather than simple inspection"
+                      ],
+                      "domains": [
+                        "Medicine"
+                      ],
+                      "examples": [
+                        {
+                          "text": "eye tests"
+                        },
+                        {
+                          "text": "researchers developed a test for the virus"
+                        }
+                      ],
+                      "id": "m_en_gbus1042280.011"
+                    },
+                    {
+                      "definitions": [
+                        "a procedure employed to identify a substance or to reveal the presence or absence of a constituent within a substance."
+                      ],
+                      "domains": [
+                        "Chemistry"
+                      ],
+                      "id": "m_en_gbus1042280.012"
+                    },
+                    {
+                      "definitions": [
+                        "the result of a medical examination or analytical procedure"
+                      ],
+                      "domains": [
+                        "Medicine"
+                      ],
+                      "examples": [
+                        {
+                          "text": "a positive test for protein"
+                        }
+                      ],
+                      "id": "m_en_gbus1042280.013"
+                    },
+                    {
+                      "definitions": [
+                        "a means of establishing whether an action, item, or situation is an instance of a specified quality, especially one held to be undesirable"
+                      ],
+                      "examples": [
+                        {
+                          "text": "a statutory test of obscenity"
+                        }
+                      ],
+                      "id": "m_en_gbus1042280.014"
+                    }
+                  ]
+                },
+                {
+                  "crossReferenceMarkers": [
+                    "short for Test match"
+                  ],
+                  "crossReferences": [
+                    {
+                      "id": "test_match",
+                      "text": "Test match",
+                      "type": "abbreviation"
+                    }
+                  ],
+                  "examples": [
+                    {
+                      "text": "the first Test against New Zealand"
+                    }
+                  ],
+                  "id": "m_en_gbus1042280.016",
+                  "variantForms": [
+                    {
+                      "text": "Test"
+                    }
+                  ]
+                },
+                {
+                  "definitions": [
+                    "a movable hearth in a reverberating furnace, used for separating gold or silver from lead."
+                  ],
+                  "domains": [
+                    "Metallurgy"
+                  ],
+                  "id": "m_en_gbus1042280.021"
+                }
+              ]
+            },
+            {
+              "etymologies": [
+                "mid 19th century: from Latin testa ‘tile, jug, shell’. Compare with test"
+              ],
+              "grammaticalFeatures": [
+                {
+                  "text": "Singular",
+                  "type": "Number"
+                }
+              ],
+              "homographNumber": "300",
+              "senses": [
+                {
+                  "definitions": [
+                    "the shell or integument of some invertebrates and protozoans, especially the chalky shell of a foraminiferan or the tough outer layer of a tunicate."
+                  ],
+                  "domains": [
+                    "Zoology"
+                  ],
+                  "id": "m_en_gbus1042290.005"
+                }
+              ]
+            }
+          ],
+          "language": "en",
+          "lexicalCategory": "Noun",
+          "pronunciations": [
+            {
+              "audioFile": "http://audio.oxforddictionaries.com/en/mp3/test_gb_1.mp3",
+              "dialects": [
+                "British English"
+              ],
+              "phoneticNotation": "IPA",
+              "phoneticSpelling": "tɛst"
+            }
+          ],
+          "text": "test"
+        },
+        {
+          "entries": [
+            {
+              "grammaticalFeatures": [
+                {
+                  "text": "Transitive",
+                  "type": "Subcategorization"
+                },
+                {
+                  "text": "Present",
+                  "type": "Tense"
+                }
+              ],
+              "homographNumber": "101",
+              "senses": [
+                {
+                  "definitions": [
+                    "take measures to check the quality, performance, or reliability of (something), especially before putting it into widespread use or practice"
+                  ],
+                  "domains": [
+                    "Metallurgy"
+                  ],
+                  "examples": [
+                    {
+                      "text": "several trial runs were carried out to test the special brakes"
+                    },
+                    {
+                      "text": "this range has not been tested on animals"
+                    }
+                  ],
+                  "id": "m_en_gbus1042280.023",
+                  "subsenses": [
+                    {
+                      "definitions": [
+                        "give (someone) a short written or oral examination of their proficiency or knowledge"
+                      ],
+                      "examples": [
+                        {
+                          "text": "all children are tested at eleven"
+                        }
+                      ],
+                      "id": "m_en_gbus1042280.029"
+                    },
+                    {
+                      "definitions": [
+                        "judge or measure (someone's proficiency or knowledge) by means of a test"
+                      ],
+                      "examples": [
+                        {
+                          "text": "the exam will test accuracy and neatness"
+                        }
+                      ],
+                      "id": "m_en_gbus1042280.030"
+                    },
+                    {
+                      "definitions": [
+                        "reveal the strengths or capabilities of (someone or something) by putting them under strain"
+                      ],
+                      "examples": [
+                        {
+                          "text": "such behaviour would severely test any marriage"
+                        }
+                      ],
+                      "id": "m_en_gbus1042280.031"
+                    },
+                    {
+                      "definitions": [
+                        "carry out a medical test on (a person, a part of the body, or a body fluid)"
+                      ],
+                      "domains": [
+                        "Medicine"
+                      ],
+                      "examples": [
+                        {
+                          "text": "he's been tested for drugs"
+                        }
+                      ],
+                      "id": "m_en_gbus1042280.032"
+                    },
+                    {
+                      "definitions": [
+                        "produce a specified result in a medical test, especially a drugs test or AIDS test"
+                      ],
+                      "domains": [
+                        "Medicine"
+                      ],
+                      "examples": [
+                        {
+                          "text": "he tested positive for steroids during the race"
+                        }
+                      ],
+                      "id": "m_en_gbus1042280.033",
+                      "notes": [
+                        {
+                          "text": "no object, with complement",
+                          "type": "grammaticalNote"
+                        }
+                      ]
+                    },
+                    {
+                      "definitions": [
+                        "examine (a substance) by means of a reagent."
+                      ],
+                      "domains": [
+                        "Chemistry"
+                      ],
+                      "id": "m_en_gbus1042280.034"
+                    },
+                    {
+                      "definitions": [
+                        "touch or taste (something) to check that it is acceptable before proceeding further"
+                      ],
+                      "examples": [
+                        {
+                          "text": "she tested the water with the tip of her elbow"
+                        }
+                      ],
+                      "id": "m_en_gbus1042280.035"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "language": "en",
+          "lexicalCategory": "Verb",
+          "pronunciations": [
+            {
+              "audioFile": "http://audio.oxforddictionaries.com/en/mp3/test_gb_1.mp3",
+              "dialects": [
+                "British English"
+              ],
+              "phoneticNotation": "IPA",
+              "phoneticSpelling": "tɛst"
+            }
+          ],
+          "text": "test"
+        }
+      ],
+      "type": "headword",
+      "word": "test"
+    }
+  ]
+}

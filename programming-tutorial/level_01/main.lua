@@ -39,6 +39,20 @@ local function newObject ()
   return new_object
 end
 
+local function newObjectMouse (x, y, vx, vy)
+  local new_object = {}
+  new_object.x = x
+  new_object.y = y
+  new_object.r = love.math.random()*255
+  new_object.g = love.math.random()*255
+  new_object.b = love.math.random()*255
+
+  new_object.dir_x = vx
+  new_object.dir_y = vy
+  return new_object
+end
+
+
 --- Move the given object as if 'dt' seconds had passed. Basically follow
 --  the uniform movement equation: S = S0 + v*dt.
 local function moveObject (object, dt)
@@ -46,12 +60,14 @@ local function moveObject (object, dt)
   object.y = object.y + 64*object.dir_y*dt
   if object.x < 0 or object.x > W then
       object.dir_x = -object.dir_x
-      love.audio.play(bounce_sfx)
+      local tmp1 = bounce_sfx:clone()
+      love.audio.play(tmp1)
   end
 
   if object.y < 0 or object.y > H then
       object.dir_y = -object.dir_y
-      love.audio.play(bounce_sfx)
+      local tmp2 = bounce_sfx:clone()
+      love.audio.play(tmp2)
   end
 end
 
@@ -65,7 +81,7 @@ end
 --  See https://love2d.org/wiki/love.graphics.getDimensions
 function love.load ()
   W, H = love.graphics.getDimensions()
-  MAX_OBJECTS = 32
+  MAX_OBJECTS = 2
 
   bounce_sfx = love.audio.newSource("bounce.ogg", "static")
 
@@ -78,17 +94,24 @@ end
 --- Update the game's state, which in this case means properly moving each
 --  game object according to its moving direction and current position.
 function love.update (dt)
-  local alpha = 1
-
+  local alpha = -.02
+  local alpha_mouse = .002
   for i,object in ipairs(objects) do
+    if love.mouse.isDown(1) then
+      mouse_x, mouse_y = love.mouse.getPosition()
+      object.dir_x = object.dir_x + (mouse_x - object.x) * alpha_mouse
+      object.dir_y = object.dir_y + (mouse_y - object.y) * alpha_mouse
+    end
     for j,object2 in ipairs(objects) do
       if (i < j) then
         dist_sqr = (object.y - object2.y)^2+(object.x - object2.x)^2
         if (dist_sqr <= 32*32) then
-          object.dir_x = 0*object.dir_x + (object2.x - object.x) * alpha
-          object.dir_y = 0*object.dir_y + (object2.y - object.y) * alpha
-          object2.dir_x = 0*object2.dir_x + (object.x - object2.x) * alpha
-          object2.dir_y = 0*object2.dir_y + (object.y - object2.y) * alpha
+          object.dir_x = object.dir_x + (object2.x - object.x) * alpha
+          object.dir_y = object.dir_y + (object2.y - object.y) * alpha
+          object2.dir_x = object2.dir_x + (object.x - object2.x) * alpha
+          object2.dir_y = object2.dir_y + (object.y - object2.y) * alpha
+          local tmp = bounce_sfx:clone()
+          love.audio.play(tmp)
         end
       end
     end
@@ -107,9 +130,32 @@ function love.keypressed (key)
   end
 end
 
+new_obj = nil
+
+function love.mousepressed (x, y, button)
+    if button == 2 then
+        new_obj = newObjectMouse(x, y, 0, 0)
+    end
+end
+
+function love.mousereleased (x, y, button)
+    beta = .1
+    if button == 2 then
+        new_obj.dir_x = (x - new_obj.x)*beta
+        new_obj.dir_y = (y - new_obj.y)*beta
+        table.insert(objects, new_obj)
+        new_obj = nil
+    end
+end
+
 --- Draw all game objects as simle white circles. We will improve on that.
 --  See https://love2d.org/wiki/love.graphics.circle
 function love.draw ()
+  if not (new_obj == nil) then
+    love.graphics.setColor(new_obj.r, new_obj.g, new_obj.b)
+    love.graphics.circle('fill', new_obj.x, new_obj.y, 16, 16)
+    love.graphics.line(new_obj.x, new_obj.y, love.mouse.getX(), love.mouse.getY())
+  end
   for i,object in ipairs(objects) do
     love.graphics.setColor(object.r, object.g, object.b)
     love.graphics.circle('fill', object.x, object.y, 16, 16)
