@@ -4,10 +4,14 @@ import sqlite3 as sql
 import os.path
 import time
 import threading
-import spacy
 from queue import Queue
 
-nlp = spacy.load('en_core_web_md')
+import spacy
+from spacy.symbols import *
+
+from bot.memory import *
+
+nlp = spacy.load('en')
 
 class Bot(object):
     def __init__(self, bot_mem_file, bot_person_file, update_time = .1):
@@ -21,6 +25,9 @@ class Bot(object):
         self.update_time = update_time
         self.in_message_queue = Queue()
         self.out_message_queues = {}
+
+        self.long_mem_obj = LongTermMemory()
+        self.short_mem_obj = ShortTermMemory(self.long_mem_obj)
 
         self.load_personality(self.bot_person_db)
 
@@ -58,11 +65,41 @@ class Bot(object):
     def shutdown(self):
         self.running_stage = False
 
+    # LANGUAGE PROCESSING
+    # Returns whether token has another as parent
+    def has_parent(self, word, parent):
+        if word.head is parent:
+            return True
+        elif word.head is word:
+            return False
+        return self.has_parent(word.head, parent)
+
+    # Return all dependents on given word and itself
+    def get_dependents(self, doc, word):
+        ret = []
+        for token in doc:
+            if token is word or self.has_parent(token, word):
+                ret.append(token)
+        return ret
+
+    # Returns subject expressions of verb
+    def get_subject(self, doc, verb):
+        for token in doc:
+            if (token.dep == nsubj or token.dep == csubj) and token.head is verb:
+                return self.get_dependents(doc, token)
+        return None
+
     # Processes language-based information
     def process_message(self, message):
         doc = nlp(message[3])
-        vec = []
-        self.answer(message[0], str(vec))
+        deps = []
+        verbs = []
+        for token in doc:
+            if token.pos == VERB:
+                verbs.append((self.get_subject(doc, token), token))
+            deps.append(token.dep_)
+        self.answer(message[0], str(deps))
+        self.answer(message[0], str(verbs))
         return
 
     # Is like the 'clock' of the mind of the bot. Each cycle processes a limited
