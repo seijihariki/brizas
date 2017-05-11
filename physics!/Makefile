@@ -7,7 +7,6 @@ LIBS:=-lsfml-graphics -lsfml-window -lsfml-system
 CEXT:=cpp
 HEXT:=hpp
 
-ASTBIN:=assets
 INCDIR:=include
 SRCDIR:=src
 OBJDIR:=obj
@@ -136,8 +135,7 @@ clean:
 
 # Configure folder structure
 
-configure: clang
-	mkdir -p $(ASTBIN)
+configure:
 	mkdir -p $(INCDIR)
 	mkdir -p $(SRCDIR)
 	mkdir -p $(OBJDIR)
@@ -146,7 +144,3 @@ configure: clang
 	mkdir -p $(EXECSRC)
 	mkdir -p $(TESTSRC)
 	mkdir -p $(TESTBIN)
-
-# Make clang_complete file
-clang:
-	echo "-I$(INCDIR)" > .clang_complete

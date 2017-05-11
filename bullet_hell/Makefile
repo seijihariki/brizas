@@ -7,7 +7,6 @@ LIBS:=-lsfml-graphics -lsfml-window -lsfml-system
 CEXT:=cpp
 HEXT:=hpp
 
-ASTBIN:=assets
 INCDIR:=include
 SRCDIR:=src
 OBJDIR:=obj
@@ -137,7 +136,6 @@ clean:
 # Configure folder structure
 
 configure: clang
-	mkdir -p $(ASTBIN)
 	mkdir -p $(INCDIR)
 	mkdir -p $(SRCDIR)
 	mkdir -p $(OBJDIR)

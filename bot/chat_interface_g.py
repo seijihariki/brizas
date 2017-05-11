@@ -47,14 +47,14 @@ class chat_if_g(Frame):
 
         elif command[0] == "help": # Show help page
             self.talk (shell_usr, "This the help page! So helpful, don't you think?")
-    
+
         elif command[0] == "set_user": # Changes current user
             if len(command) < 2:
                 self.talk (shell_usr, "Usage: set_user <user>")
             else:
                 self.talk (shell_usr, "User set to " + command[1])
                 self.user = command[1]
-    
+
         else: # If no matching command exists, try to run on shell
             self.talk (shell_usr, "Handling command on shell: " + command[0])
             try:

@@ -149,11 +149,16 @@ int main()
     densities = new double[V_SIZE];
     prev_densities = new double[V_SIZE];
 
-    sources[IX(50, 50)] = 10000;
-    v_sources[IX(5, 5)] = 10;
+    double theta = 0;
 
     for (int i = 0; i < V_SIZE; i++)
-        vel_u[i] = vel_v[i] = -.2;
+    {
+        vel_u[i] = 20;
+        vel_v[i] = 20;
+    }
+
+    sources[IX(50, 50)] = 10000;
+    v_sources[IX(5, 5)] = 10;
 
     sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE, WINDOW_SIZE), "Fluids");
 
@@ -172,7 +177,7 @@ int main()
 
         double dt = clock.restart().asSeconds();
 
-        vel_step(vel_u, vel_v, prev_vel_u, prev_vel_v, u_sources, v_sources, .1, dt);
+        vel_step(vel_u, vel_v, prev_vel_u, prev_vel_v, u_sources, v_sources, .002, dt);
         dens_step(densities, prev_densities, sources, vel_u, vel_v, .0005, dt);
         window.clear();
 
@@ -189,10 +194,15 @@ int main()
                 if (col > 255)
                     col = 255;
                 shape.setPosition((i - 1)*tile_size, (j - 1)*tile_size);
-                shape.setFillColor(sf::Color(col, col, col));
+                shape.setFillColor(sf::Color(vel_v[i], col, vel_u[i]));
                 window.draw(shape);
             }
         }
+
+        double dtheta = .05;
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+            theta += dtheta;
 
         window.display();
     }

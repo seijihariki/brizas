@@ -3,7 +3,7 @@ CFLAGS=-Wall -std=c++11
 DEBUGF:=-g
 RELEASEF:=-O2
 
-LIBS:=-lsfml-graphics -lsfml-window -lsfml-system
+LIBS:=-lsfml-graphics -lsfml-window -lsfml-system -lGL -lGLEW
 CEXT:=cpp
 HEXT:=hpp
 

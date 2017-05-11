@@ -10,6 +10,7 @@ import spacy
 from spacy.symbols import *
 
 from bot.memory import *
+from bot.lang_center import *
 
 nlp = spacy.load('en')
 
@@ -26,6 +27,7 @@ class Bot(object):
         self.in_message_queue = Queue()
         self.out_message_queues = {}
 
+        self.lang_center = LanguageCenter()
         self.long_mem_obj = LongTermMemory()
         self.short_mem_obj = ShortTermMemory(self.long_mem_obj)
 
@@ -65,41 +67,17 @@ class Bot(object):
     def shutdown(self):
         self.running_stage = False
 
-    # LANGUAGE PROCESSING
-    # Returns whether token has another as parent
-    def has_parent(self, word, parent):
-        if word.head is parent:
-            return True
-        elif word.head is word:
-            return False
-        return self.has_parent(word.head, parent)
-
-    # Return all dependents on given word and itself
-    def get_dependents(self, doc, word):
-        ret = []
-        for token in doc:
-            if token is word or self.has_parent(token, word):
-                ret.append(token)
-        return ret
-
-    # Returns subject expressions of verb
-    def get_subject(self, doc, verb):
-        for token in doc:
-            if (token.dep == nsubj or token.dep == csubj) and token.head is verb:
-                return self.get_dependents(doc, token)
-        return None
-
+    # MESSAGE PROCESSING
     # Processes language-based information
     def process_message(self, message):
         doc = nlp(message[3])
         deps = []
         verbs = []
         for token in doc:
-            if token.pos == VERB:
-                verbs.append((self.get_subject(doc, token), token))
             deps.append(token.dep_)
+
         self.answer(message[0], str(deps))
-        self.answer(message[0], str(verbs))
+        self.answer(message[0], str(self.lang_center.rec_parser(doc)))
         return
 
     # Is like the 'clock' of the mind of the bot. Each cycle processes a limited
@@ -124,8 +102,6 @@ class Bot(object):
         # is where logical courses of action are decided and rated, from
         # knowledge of the current context (short-term memory) and past
         # knowledge + research results (long-term memory)
-
-        
 
         # AI emotion - Applies emotional filters on the bot's possible courses
         # of action, decisions and thoughts, based on personality traits
