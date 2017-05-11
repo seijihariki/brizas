@@ -7,7 +7,7 @@ LIBS:=-lsfml-graphics -lsfml-window -lsfml-system
 CEXT:=cpp
 HEXT:=hpp
 
-ASTBIN:=assets
+ASTDIR:=assets
 INCDIR:=include
 SRCDIR:=src
 OBJDIR:=obj
@@ -23,13 +23,13 @@ RELEASE_POST:=
 
 # Auto dependency, executable sources and tests sources finder
 
-OBJS:=$(patsubst $(SRCDIR)/%.$(CEXT), $(OBJDIR)/%.o, $(wildcard $(SRCDIR)/*.$(CEXT)))
-TESTS:=$(patsubst $(TESTSRC)/%.$(CEXT), $(TESTBIN)/%, $(wildcard $(TESTSRC)/*.$(CEXT)))
-EXECS:=$(patsubst $(EXECSRC)/%.$(CEXT), $(BINDIR)/%, $(wildcard $(EXECSRC)/*.$(CEXT)))
+OBJS:=$(patsubst $(SRCDIR)/%.$(CEXT), $(OBJDIR)/%.o, $(shell find $(SRCDIR) -type f -name '*.$(CEXT)'))
+TESTS:=$(patsubst $(TESTSRC)/%.$(CEXT), $(TESTBIN)/%, $(shell find $(TESTSRC) -type f -name '*.$(CEXT)'))
+EXECS:=$(patsubst $(EXECSRC)/%.$(CEXT), $(BINDIR)/%, $(shell find $(EXECSRC) -type f -name '*.$(CEXT)'))
 
-SRCS:=$(wildcard $(SRCDIR)/*.$(CEXT))
-SRCS+=$(wildcard $(TESTSRC)/*.$(CEXT))
-SRCS+=$(wildcard $(EXECSRC)/*.$(CEXT))
+SRCS:=$(shell find $(SRCDIR) -type f -name '*.$(CEXT)')
+SRCS+=$(shell find $(TESTDIR) -type f -name '*.$(CEXT)')
+SRCS+=$(shell find $(EXECDIR) -type f -name '*.$(CEXT)')
 
 # Don't erase dependency and object files
 
@@ -42,14 +42,54 @@ SRCS+=$(wildcard $(EXECSRC)/*.$(CEXT))
 # Make rules
 
 release: CFLAGS+=$(RELEASEF)
+release: organize
 release: dependencies
 release: execs$(RELEASE_POST)
 release: tests$(RELEASE_POST)
 
 debug: CFLAGS+=$(DEBUGF)
+debug: organize
 debug: dependencies
 debug: execs$(DEBUG_POST)
 debug: tests$(DEBUG_POST)
+
+# Generate directory trees on objects folder, delete unnecessary stuff, etc.
+.PHONY: organize
+organize: delete configure
+	@echo "Organizing..."
+	@mkdir -p $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(shell find $(SRCDIR)/ -type d -not -empty)) .
+	@mkdir -p $(patsubst $(SRCDIR)/%, $(DEPDIR)/%, $(shell find $(SRCDIR)/ -type d -not -empty)) .
+	@mkdir -p $(patsubst $(EXECSRC)/%, $(BINDIR)/%, $(shell find $(EXECSRC)/ -type d -not -empty)) .
+	@mkdir -p $(patsubst $(TESTSRC)/%, $(TESTBIN)/%, $(shell find $(TESTSRC)/ -type d -not -empty)) .
+
+.PHONY: delete
+delete:
+	@echo "Deleting empty dirs..."
+	@find $(ASTDIR)/ -type d -empty -delete
+	@find $(INCDIR)/ -type d -empty -delete
+	@find $(SRCDIR)/ -type d -empty -delete
+	@find $(OBJDIR)/ -type d -empty -delete
+	@find $(BINDIR)/ -type d -empty -delete
+	@find $(DEPDIR)/ -type d -empty -delete
+	@find $(EXECSRC)/ -type d -empty -delete
+	@find $(TESTSRC)/ -type d -empty -delete
+	@find $(TESTBIN)/ -type d -empty -delete
+
+.PHONY: configure
+configure: clang
+	@echo "Configuring directories..."
+	@mkdir -p $(ASTDIR)
+	@mkdir -p $(INCDIR)
+	@mkdir -p $(SRCDIR)
+	@mkdir -p $(OBJDIR)
+	@mkdir -p $(BINDIR)
+	@mkdir -p $(DEPDIR)
+	@mkdir -p $(EXECSRC)
+	@mkdir -p $(TESTSRC)
+	@mkdir -p $(TESTBIN)
+
+clang:
+	@echo "-I$(INCDIR)" > .clang_complete
 
 # Make executables
 
@@ -133,20 +173,3 @@ clean:
 	rm -rf $(OBJDIR)/*.o
 	rm -rf $(BINDIR)/*
 	rm -rf $(TESTBIN)/*
-
-# Configure folder structure
-
-configure: clang
-	mkdir -p $(ASTBIN)
-	mkdir -p $(INCDIR)
-	mkdir -p $(SRCDIR)
-	mkdir -p $(OBJDIR)
-	mkdir -p $(BINDIR)
-	mkdir -p $(DEPDIR)
-	mkdir -p $(EXECSRC)
-	mkdir -p $(TESTSRC)
-	mkdir -p $(TESTBIN)
-
-# Make clang_complete file
-clang:
-	echo "-I$(INCDIR)" > .clang_complete
