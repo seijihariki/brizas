@@ -8,8 +8,18 @@
 
 #include "opengl.hpp"
 #include "shaders.hpp"
-#include "camera.hpp"
+#include "graphics/camera.hpp"
 #include "drawable3d.hpp"
+
+float min(float a, float b)
+{
+    return a > b?b:a;
+}
+
+float max(float a, float b)
+{
+    return a < b?b:a;
+}
 
 // Main
 int main()
@@ -35,26 +45,20 @@ int main()
     std::vector<glm::vec3> lights;
     std::vector<glm::vec3> colors;
 
-    // Objects
-    Drawable_3D *obj = new Drawable_3D;
-    objects.push_back(obj);
-    obj->loadFromFile("assets/untitled.obj");
-    obj->genGLBuffers();
+    // Load model
+    Model ball_model("assets/ball.obj");
+    Model terrain_model("assets/terrain.obj");
 
-    obj = new Drawable_3D;
+    // Objects
+    Drawable_3D *obj = new Drawable_3D(&ball_model);
     objects.push_back(obj);
-    obj->loadFromFile("assets/obj2.obj");
-    obj->genGLBuffers();
+
+    obj = new Drawable_3D(&ball_model);
+    objects.push_back(obj);
     obj->setTranslation(glm::translate(glm::mat4(1), glm::vec3(5, 0, 0)));
 
-    for (int i = 0; i < 5000; i++)
-    {
-        obj = new Drawable_3D;
-        objects.push_back(obj);
-        obj->loadFromFile("assets/obj2.obj");
-        obj->genGLBuffers();
-        obj->setTranslation(glm::translate(glm::mat4(1), glm::vec3(i + 1 + 10.f, 5*sin(i/1.5), 0.f)));
-    }
+    obj = new Drawable_3D(&terrain_model);
+    objects.push_back(obj);
 
     // Lights
     lights.push_back(glm::vec3(0, 5, 5));
@@ -62,6 +66,9 @@ int main()
 
     lights.push_back(glm::vec3(0, 5, 5));
     colors.push_back(glm::vec3(.6, 0, 0));
+
+    lights.push_back(glm::vec3(0, 5, 5));
+    colors.push_back(glm::vec3(0, .7, 0));
 
     sf::Clock time;
     sf::Clock clock;
@@ -81,7 +88,7 @@ int main()
         looking_at.y = sin(looking_angles.y);
 
         float speed = 5;
-        float rot_speed = 1.4;
+        float rot_speed = 2;
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
             camera_pos += looking_at*speed*delta_t;
@@ -101,17 +108,23 @@ int main()
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
             looking_angles.x += rot_speed*delta_t;
 
+        looking_angles.y = min(looking_angles.y, PI/2 - .1);
+        looking_angles.y = max(looking_angles.y, -PI/2 + .1);
+
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
         looking_at += camera_pos;
 
         camera.setView(camera_pos, looking_at);
 
-        lights[0] = glm::vec3(sin(time.getElapsedTime().asSeconds()), cos(time.getElapsedTime().asSeconds()), 0) * 2.5f;
-        lights[1] = glm::vec3(cos(1.333*time.getElapsedTime().asSeconds()), 0, sin(1.333*time.getElapsedTime().asSeconds())) * 2.5f;
+        lights[0] =
+            glm::vec3(0, 3, 5)*(float)sin(time.getElapsedTime().asSeconds()) +
+            glm::vec3(5, 0, 0)*(float)cos(time.getElapsedTime().asSeconds()) +
+            glm::vec3(0, 5, 0);
 
-        objects[1]->setTranslation(glm::translate(glm::mat4(1), glm::vec3(5 + sin(time.getElapsedTime().asSeconds()), 0, 0)));
+        lights[2] = camera_pos;
 
+        glUniform3f(glGetUniformLocation(shader_ID, "camera_pos"), camera_pos.x, camera_pos.y, camera_pos.z);
         glUniform3fv(glGetUniformLocation(shader_ID, "lights"), lights.size(), (GLfloat*)&lights[0]);
         glUniform3fv(glGetUniformLocation(shader_ID, "colors"), lights.size(), (GLfloat*)&colors[0]);
 

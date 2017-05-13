@@ -1,4 +1,4 @@
-#include "camera.hpp"
+#include "graphics/camera.hpp"
 
 Camera::Camera(glm::vec3 position, glm::vec3 lookat,
         float FoV, float AR, glm::vec3 up_vec,

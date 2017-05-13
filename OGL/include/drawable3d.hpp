@@ -1,5 +1,6 @@
 #include "opengl.hpp"
-#include "camera.hpp"
+#include "graphics/camera.hpp"
+#include "graphics/model.hpp"
 
 #ifndef __DRAWABLE3D_HPP__
 #define __DRAWABLE3D_HPP__
@@ -8,11 +9,7 @@
 class Drawable_3D
 {
 public:
-    Drawable_3D();
-
-    GLuint genGLBuffers();
-
-    void loadFromFile(std::string filename);
+    Drawable_3D(Model *model = nullptr);
 
     void draw(Camera &camera, GLuint shader, GLuint vertex = 0, GLuint texturec = 1, GLuint normal = 2);
 
@@ -28,21 +25,14 @@ public:
     ~Drawable_3D();
 
 protected:
-
     void updateModelMatrix();
+
+    Model *model_obj;
 
     glm::mat4 scale;
     glm::mat4 rotation;
     glm::mat4 translation;
     glm::mat4 model;
-
-    std::vector<glm::vec3> vertices;
-    std::vector<glm::vec2> texture_c;
-    std::vector<glm::vec3> normals;
-
-    GLuint VertexArrayID, vertexBuffer;
-    GLuint TextureCArrayID, texturecBuffer;
-    GLuint NormalArrayID, normalBuffer;
 };
 
 #endif

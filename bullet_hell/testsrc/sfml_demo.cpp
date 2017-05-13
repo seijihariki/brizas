@@ -5,6 +5,8 @@
 #include "ship_controllers/linear_ship_controller.hpp"
 #include "ship.hpp"
 
+#include "bullet.hpp"
+
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(800, 800), "SFML works!");
@@ -12,6 +14,7 @@ int main()
     InputShipController *input_controller = new InputShipController(500);
 
     std::vector<Ship*> ships;
+    std::vector<Bullet*> bullet;
     ships.push_back(new Ship(sf::Vector2f(400, 780), 0, input_controller));
 
     sf::Clock clock;

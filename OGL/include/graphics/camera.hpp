@@ -1,7 +1,7 @@
 #include "opengl.hpp"
 
-#ifndef __CAMERA_HPP__
-#define __CAMERA_HPP__
+#ifndef __GRAPHICS_CAMERA_HPP__
+#define __GRAPHICS_CAMERA_HPP__
 
 // Class Camera
 class Camera
