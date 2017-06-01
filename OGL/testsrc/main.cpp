@@ -9,6 +9,7 @@
 #include "opengl.hpp"
 #include "shaders.hpp"
 #include "graphics/camera.hpp"
+#include "graphics/texture.hpp"
 #include "drawable3d.hpp"
 
 float min(float a, float b)
@@ -44,10 +45,30 @@ int main()
     std::vector<Drawable_3D*> objects;
     std::vector<glm::vec3> lights;
     std::vector<glm::vec3> colors;
+    std::vector<float> intens;
 
     // Load model
-    Model ball_model("assets/ball.obj");
+    Model ball_model("assets/ball2.obj");
     Model terrain_model("assets/terrain.obj");
+
+    // Load texture
+    sf::Image image;
+    std::vector<unsigned char> pixels;
+    
+    image.loadFromFile("assets/stone.png");
+    for (int i = 0; i < (image.getSize().x * image.getSize().y * 4); i++)
+        pixels.push_back(image.getPixelsPtr()[i]); 
+    Texture stone_tex(pixels, image.getSize().x, image.getSize().y);
+    stone_tex.loadToGPU();
+    stone_tex.activate(1);
+
+    pixels.clear();
+    image.loadFromFile("assets/normal.png");
+    for (int i = 0; i < (image.getSize().x * image.getSize().y * 4); i++)
+        pixels.push_back(image.getPixelsPtr()[i]); 
+    Texture bump_tex(pixels, image.getSize().x, image.getSize().y);
+    bump_tex.loadToGPU();
+    bump_tex.activate(2);
 
     // Objects
     Drawable_3D *obj = new Drawable_3D(&ball_model);
@@ -57,18 +78,25 @@ int main()
     objects.push_back(obj);
     obj->setTranslation(glm::translate(glm::mat4(1), glm::vec3(5, 0, 0)));
 
+    obj = new Drawable_3D(&ball_model);
+    objects.push_back(obj);
+    obj->setScale(glm::vec3(20, 20, 20));
+
     obj = new Drawable_3D(&terrain_model);
     objects.push_back(obj);
 
     // Lights
     lights.push_back(glm::vec3(0, 5, 5));
     colors.push_back(glm::vec3(0, .6, .6));
+    intens.push_back(1);
 
     lights.push_back(glm::vec3(0, 5, 5));
     colors.push_back(glm::vec3(.6, 0, 0));
+    intens.push_back(1);
 
     lights.push_back(glm::vec3(0, 5, 5));
-    colors.push_back(glm::vec3(0, .7, 0));
+    colors.push_back(glm::vec3(1, 1, 1));
+    intens.push_back(1);
 
     sf::Clock time;
     sf::Clock clock;
@@ -127,10 +155,10 @@ int main()
         glUniform3f(glGetUniformLocation(shader_ID, "camera_pos"), camera_pos.x, camera_pos.y, camera_pos.z);
         glUniform3fv(glGetUniformLocation(shader_ID, "lights"), lights.size(), (GLfloat*)&lights[0]);
         glUniform3fv(glGetUniformLocation(shader_ID, "colors"), lights.size(), (GLfloat*)&colors[0]);
+        glUniform1fv(glGetUniformLocation(shader_ID, "intens"), lights.size(), (GLfloat*)&intens[0]);
 
         for (Drawable_3D *obj : objects)
             obj->draw(camera, shader_ID);
-
         window.display();
     }
 }

@@ -11,40 +11,29 @@ void Drawable_3D::draw(Camera &camera, GLuint shader, GLuint vertex, GLuint text
     GLuint vertexBuffer;
     GLuint texturecBuffer;
     GLuint normalBuffer;
-  
+
     if (!model_obj->isLoaded())
         model_obj->loadToGPU();
 
-    vertexBuffer   = model_obj->getVertexBuffer();
-    texturecBuffer = model_obj->getTextureBuffer();
-    normalBuffer   = model_obj->getNormalBuffer();
-
     glm::mat4 mvp = camera.getMVP(model);
-    
+
     GLuint MVP = glGetUniformLocation(shader, "MVP");
     glUniformMatrix4fv(MVP, 1, GL_FALSE, &mvp[0][0]);
 
     GLuint MT = glGetUniformLocation(shader, "MT");
     glUniformMatrix4fv(MT, 1, GL_FALSE, &model[0][0]);
 
-    glEnableVertexAttribArray(vertex);
-    glEnableVertexAttribArray(texturec);
-    glEnableVertexAttribArray(normal);
+    GLuint text_sampler = glGetUniformLocation(shader, "text");
+    glUniform1i(text_sampler, 0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glVertexAttribPointer(vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, texturecBuffer);
-    glVertexAttribPointer(texturec, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
-    glVertexAttribPointer(normal, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    GLuint bump_sampler = glGetUniformLocation(shader, "bump");
+    glUniform1i(bump_sampler, 1);
+    
+    model_obj->activate(vertex, texturec, normal);
 
     glDrawArrays(GL_TRIANGLES, 0, model_obj->vertexCnt());
 
-    glDisableVertexAttribArray(vertex);
-    glDisableVertexAttribArray(texturec);
-    glDisableVertexAttribArray(normal);
+    model_obj->deactivate();
 }
 
 void Drawable_3D::setScale(glm::vec3 scale)

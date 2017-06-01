@@ -17,10 +17,13 @@ public:
     void loadToGPU();
     void unloadFromGPU();
 
+    GLenum activate(GLuint texture_index);
+    void deactivate();
+
     GLuint getTextureID();
 
 private:
-    bool loaded;
+    bool loaded, bound;
 
     std::vector<unsigned char> image;
     GLsizei width, height;

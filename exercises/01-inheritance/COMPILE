@@ -1,0 +1,2 @@
+The program should be compiled with:
+g++ 01-inheritance.cpp 01-circle.cpp 01-square.cpp 01-shape.cpp -I include -o inheritance

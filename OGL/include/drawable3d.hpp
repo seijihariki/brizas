@@ -1,6 +1,6 @@
 #include "opengl.hpp"
 #include "graphics/camera.hpp"
-#include "graphics/model.hpp"
+#include "graphics/model/model.hpp"
 
 #ifndef __DRAWABLE3D_HPP__
 #define __DRAWABLE3D_HPP__

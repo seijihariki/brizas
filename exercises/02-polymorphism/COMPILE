@@ -1,0 +1,2 @@
+The program should be compiled with:
+g++ *.cpp -I include -o polymorphism

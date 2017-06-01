@@ -1,18 +1,9 @@
-#include "graphics/model.hpp"
+#include "graphics/model/model.hpp"
 #include <string.h>
 
 Model::Model(std::string filename)
 { 
-    VertexArrayID   = 0;
-    TextureCArrayID = 0;
-    NormalArrayID   = 0;
-
-    vertexBuffer    = 0;
-    texturecBuffer  = 0;
-    normalBuffer    = 0;
-    
     loadFromFile(filename);
-
     loaded = false;
 }
 
@@ -103,7 +94,12 @@ void Model::loadFromFile(std::string filename)
     }
 
     file.close();
-    printf("Model %s was loaded!\n", filename.c_str());
+
+    vertices_vd = new VertexData<glm::vec3>(vertices, 3);
+    texture_vd = new VertexData<glm::vec2>(texture_c, 2);
+    normals_vd = new VertexData<glm::vec3>(normals, 3);
+
+    printf("Model %s was loaded with %lu triangles!\n", filename.c_str(), vertices.size()/3);
 }
 
 void Model::loadToGPU()
@@ -112,27 +108,10 @@ void Model::loadToGPU()
         return;
 
     printf("Loading model %s to GPU...\n", name.c_str());
-    
-    glGenVertexArrays(1, &VertexArrayID);
-    glBindVertexArray(VertexArrayID);
-
-    glGenBuffers(1, &vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
-
-    glGenVertexArrays(1, &TextureCArrayID);
-    glBindVertexArray(TextureCArrayID);
-
-    glGenBuffers(1, &texturecBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, texturecBuffer);
-    glBufferData(GL_ARRAY_BUFFER, texture_c.size() * sizeof(glm::vec2), &texture_c[0], GL_STATIC_DRAW);
-
-    glGenVertexArrays(1, &NormalArrayID);
-    glBindVertexArray(NormalArrayID);
-
-    glGenBuffers(1, &normalBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
-    glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
+   
+    vertices_vd->loadToGPU();
+    texture_vd->loadToGPU();
+    normals_vd->loadToGPU();
 
     loaded = true;
 
@@ -141,39 +120,14 @@ void Model::loadToGPU()
 
 void Model::unloadFromGPU()
 {
-    glDeleteVertexArrays(1, &VertexArrayID);
+    if (!loaded)
+        return;
 
-    glDeleteBuffers(1, &vertexBuffer);
-
-    glDeleteVertexArrays(1, &TextureCArrayID);
-
-    glDeleteBuffers(1, &texturecBuffer);
-
-    glDeleteVertexArrays(1, &NormalArrayID);
-
-    glDeleteBuffers(1, &normalBuffer);
-
+    vertices_vd->unloadFromGPU();
+    texture_vd->unloadFromGPU();
+    normals_vd->unloadFromGPU();
+    
     loaded = false;
-}
-
-GLuint Model::getVertexBuffer()
-{
-    return vertexBuffer;
-}
-
-GLuint Model::getTextureBuffer()
-{
-    return texturecBuffer;
-}
-
-GLuint Model::getNormalBuffer()
-{
-    return normalBuffer;
-}
-
-std::string Model::getName()
-{
-    return name;
 }
 
 bool Model::isLoaded()
@@ -181,7 +135,26 @@ bool Model::isLoaded()
     return loaded;
 }
 
-unsigned int Model::vertexCnt()
+void Model::activate(GLuint vertex, GLuint texture, GLuint normal)
+{
+    vertices_vd->activate(vertex);
+    texture_vd->activate(texture);
+    normals_vd->activate(normal);
+}
+
+void Model::deactivate()
+{
+    vertices_vd->deactivate();
+    texture_vd->deactivate();
+    normals_vd->deactivate();
+}
+
+std::string Model::getName()
+{
+    return name;
+}
+
+GLuint Model::vertexCnt()
 {
     return vertices.size();
 }

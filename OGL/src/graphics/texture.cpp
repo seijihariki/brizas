@@ -7,6 +7,7 @@ Texture::Texture(std::vector<unsigned char> image,
             GLuint n_type)
     :
         loaded(false),
+        bound(false),
         image(image),
         width(width),
         height(height),
@@ -39,6 +40,9 @@ void Texture::loadToGPU()
             n_type,
             &image[0]);
 
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
     loaded = true;
     printf("Loaded texture!\n");
 }
@@ -53,7 +57,13 @@ void Texture::unloadFromGPU()
     loaded = false;
 }
 
+GLenum Texture::activate(GLuint texture_index)
+{
+    glActiveTexture(GL_TEXTURE0 + texture_index);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+}
+
 GLuint Texture::getTextureID()
 {
-    return textureID;
+    return loaded ? textureID : 0;
 }

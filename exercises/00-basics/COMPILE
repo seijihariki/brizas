@@ -1,0 +1,2 @@
+The program should be compiled with:
+g++ 00-basics.cpp 00-circle.cpp -I include -o basics
