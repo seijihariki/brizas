@@ -54,10 +54,10 @@ int main()
     // Load texture
     sf::Image image;
     std::vector<unsigned char> pixels;
-    
+
     image.loadFromFile("assets/stone.png");
     for (int i = 0; i < (image.getSize().x * image.getSize().y * 4); i++)
-        pixels.push_back(image.getPixelsPtr()[i]); 
+        pixels.push_back(image.getPixelsPtr()[i]);
     Texture stone_tex(pixels, image.getSize().x, image.getSize().y);
     stone_tex.loadToGPU();
     stone_tex.activate(1);
@@ -65,7 +65,7 @@ int main()
     pixels.clear();
     image.loadFromFile("assets/normal.png");
     for (int i = 0; i < (image.getSize().x * image.getSize().y * 4); i++)
-        pixels.push_back(image.getPixelsPtr()[i]); 
+        pixels.push_back(image.getPixelsPtr()[i]);
     Texture bump_tex(pixels, image.getSize().x, image.getSize().y);
     bump_tex.loadToGPU();
     bump_tex.activate(2);
