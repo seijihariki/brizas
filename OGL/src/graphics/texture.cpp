@@ -28,6 +28,8 @@ void Texture::loadToGPU()
 
     printf("Loading Texture...\n");
     glGenTextures(1, &textureID);
+    GLint prevBound;
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &prevBound);
     glBindTexture(GL_TEXTURE_2D, textureID);
 
     glTexImage2D(GL_TEXTURE_2D,
@@ -42,6 +44,8 @@ void Texture::loadToGPU()
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    
+    glBindTexture(GL_TEXTURE_2D, prevBound);
 
     loaded = true;
     printf("Loaded texture!\n");

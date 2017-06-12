@@ -1,7 +1,7 @@
 #include "drawable3d.hpp"
 
-Drawable_3D::Drawable_3D(Model *model)
-    : model_obj(model)
+Drawable_3D::Drawable_3D(Model *model, Texture *texture)
+    : model_obj(model), texture(texture)
 {
     updateModelMatrix();
 }
@@ -14,6 +14,9 @@ void Drawable_3D::draw(Camera &camera, GLuint shader, GLuint vertex, GLuint text
 
     if (!model_obj->isLoaded())
         model_obj->loadToGPU();
+
+    if (texture)
+        texture->activate(0);
 
     glm::mat4 mvp = camera.getMVP(model);
 
@@ -60,7 +63,7 @@ void Drawable_3D::setRotation(glm::mat4 rotation)
 
 void Drawable_3D::setTranslation(glm::vec3 translation)
 {
-    glm::translate(glm::mat4(1.0f), translation);
+    setTranslation(glm::translate(glm::mat4(1.0f), translation));
 }
 
 void Drawable_3D::setTranslation(glm::mat4 translation)

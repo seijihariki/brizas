@@ -1,5 +1,6 @@
 #include "opengl.hpp"
 #include "graphics/camera.hpp"
+#include "graphics/texture.hpp"
 #include "graphics/model/model.hpp"
 
 #ifndef __DRAWABLE3D_HPP__
@@ -9,7 +10,7 @@
 class Drawable_3D
 {
 public:
-    Drawable_3D(Model *model = nullptr);
+    Drawable_3D(Model *model = nullptr, Texture *texture = nullptr);
 
     void draw(Camera &camera, GLuint shader, GLuint vertex = 0, GLuint texturec = 1, GLuint normal = 2);
 
@@ -28,6 +29,7 @@ protected:
     void updateModelMatrix();
 
     Model *model_obj;
+    Texture *texture;
 
     glm::mat4 scale;
     glm::mat4 rotation;

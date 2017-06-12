@@ -50,48 +50,59 @@ int main()
     // Load model
     Model ball_model("assets/ball2.obj");
     Model terrain_model("assets/terrain.obj");
+    Model sky_cube_model("assets/skycube.obj");
 
     // Load texture
     sf::Image image;
     std::vector<unsigned char> pixels;
 
-    image.loadFromFile("assets/stone.png");
+    image.loadFromFile("assets/brick_tex.png");
     for (int i = 0; i < (image.getSize().x * image.getSize().y * 4); i++)
         pixels.push_back(image.getPixelsPtr()[i]);
     Texture stone_tex(pixels, image.getSize().x, image.getSize().y);
     stone_tex.loadToGPU();
-    stone_tex.activate(1);
 
     pixels.clear();
-    image.loadFromFile("assets/normal.png");
+    image.loadFromFile("assets/brick_norm.png");
     for (int i = 0; i < (image.getSize().x * image.getSize().y * 4); i++)
         pixels.push_back(image.getPixelsPtr()[i]);
     Texture bump_tex(pixels, image.getSize().x, image.getSize().y);
     bump_tex.loadToGPU();
-    bump_tex.activate(2);
+
+    pixels.clear();
+    image.loadFromFile("assets/cubemap.png");
+    for (int i = 0; i < (image.getSize().x * image.getSize().y * 4); i++)
+        pixels.push_back(image.getPixelsPtr()[i]);
+    Texture sky_tex(pixels, image.getSize().x, image.getSize().y);
+    sky_tex.loadToGPU();
+
+    stone_tex.activate(0);
+    bump_tex.activate(1);
 
     // Objects
-    Drawable_3D *obj = new Drawable_3D(&ball_model);
+    Drawable_3D *obj = new Drawable_3D(&ball_model, &stone_tex);
     objects.push_back(obj);
 
-    obj = new Drawable_3D(&ball_model);
+    obj = new Drawable_3D(&ball_model, &stone_tex);
     objects.push_back(obj);
     obj->setTranslation(glm::translate(glm::mat4(1), glm::vec3(5, 0, 0)));
 
-    obj = new Drawable_3D(&ball_model);
+    obj = new Drawable_3D(&terrain_model, &stone_tex);
+    objects.push_back(obj);
+    float angle = 0;
+
+    obj = new Drawable_3D(&sky_cube_model, &sky_tex);
     objects.push_back(obj);
     obj->setScale(glm::vec3(20, 20, 20));
-
-    obj = new Drawable_3D(&terrain_model);
-    objects.push_back(obj);
+    obj->setRotation(glm::quat(glm::vec3(-PI/2, 0, 0)));
 
     // Lights
     lights.push_back(glm::vec3(0, 5, 5));
-    colors.push_back(glm::vec3(0, .6, .6));
+    colors.push_back(glm::vec3(0, 1, 1));
     intens.push_back(1);
 
     lights.push_back(glm::vec3(0, 5, 5));
-    colors.push_back(glm::vec3(.6, 0, 0));
+    colors.push_back(glm::vec3(1, 0, 0));
     intens.push_back(1);
 
     lights.push_back(glm::vec3(0, 5, 5));
@@ -145,12 +156,17 @@ int main()
 
         camera.setView(camera_pos, looking_at);
 
+        angle += delta_t*.1;
+        objects[0]->setRotation(glm::quat(glm::vec3(0, angle, 0)));
+        objects[2]->setRotation(glm::quat(glm::vec3(0, angle, 0)));
+
         lights[0] =
             glm::vec3(0, 3, 5)*(float)sin(time.getElapsedTime().asSeconds()) +
             glm::vec3(5, 0, 0)*(float)cos(time.getElapsedTime().asSeconds()) +
             glm::vec3(0, 5, 0);
 
         lights[2] = camera_pos;
+        objects[3]->setTranslation(camera_pos);
 
         glUniform3f(glGetUniformLocation(shader_ID, "camera_pos"), camera_pos.x, camera_pos.y, camera_pos.z);
         glUniform3fv(glGetUniformLocation(shader_ID, "lights"), lights.size(), (GLfloat*)&lights[0]);

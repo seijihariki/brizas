@@ -17,8 +17,6 @@ void main(){
     vec3 ambient = vec3(.1, .1, .1);
 
     color = ambient;
-    color += texture(text, tex_coords).xyz;
-    color -= ambient*5;
 
     vec3 normal = frag_normal;
 
@@ -35,8 +33,11 @@ void main(){
         color += clamp(colors[i] * pow(dot(normalize(frag_position.xyz - camera_pos), normalize(lights[i] - camera_pos)), 10000.0), 0.0, 1.0);
     }
     //color = surface_cam;
-    //color = texture(bump, tex_coords).xyz;
     //color = vec3(tex_coords, 0);
     //color = ambient * texture(text, tex_coords).xyz;
+    color.r *= texture(text, tex_coords).r;
+    color.g *= texture(text, tex_coords).g;
+    color.b *= texture(text, tex_coords).b;
+    color = texture(text, tex_coords).rgb;
     color = clamp(color, 0.0, 1.0);
 }

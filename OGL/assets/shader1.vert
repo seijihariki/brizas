@@ -14,6 +14,6 @@ uniform mat4 MVP;
 void main() {
     tex_coords = texture_coords;
     frag_position = MT * vec4(vertexPosition_modelspace, 1);
-    frag_normal = normal_vector;
+    frag_normal = normalize(MT * vec4(normal_vector, 0)).xyz;
     gl_Position = MVP * vec4(vertexPosition_modelspace, 1);
 }
