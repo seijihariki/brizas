@@ -13,6 +13,7 @@ SRCDIR:=src
 OBJDIR:=obj
 BINDIR:=bin
 DEPDIR:=deps
+EXTLIB:=../libs
 
 EXECSRC:=execsrc
 TESTSRC:=testsrc

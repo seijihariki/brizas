@@ -30,3 +30,6 @@
 *.out
 *.app
 */*bin/*
+
+# Python compiled
+*.pyc

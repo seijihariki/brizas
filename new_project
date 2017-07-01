@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# This script creates new project with given name from base template
+# if the project does not already exist
+[ -z "$1" ] && echo "Usage: $0 <project name>"
+([ ! -d "$1" ] || (echo "There is already a folder named '$1'" && false)) &&
+    ((cp -r base "$1" && cd "$1" && make configure) &&
+    echo "Successfuly created project" ||
+    echo "Failed copying base directory!")

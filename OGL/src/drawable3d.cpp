@@ -31,7 +31,7 @@ void Drawable_3D::draw(Camera &camera, GLuint shader, GLuint vertex, GLuint text
 
     GLuint bump_sampler = glGetUniformLocation(shader, "bump");
     glUniform1i(bump_sampler, 1);
-    
+
     model_obj->activate(vertex, texturec, normal);
 
     glDrawArrays(GL_TRIANGLES, 0, model_obj->vertexCnt());
