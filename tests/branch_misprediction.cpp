@@ -21,11 +21,11 @@ int main ()
 
     uli tmp = 0;
 
-    // Minimizes cache misses
+    // Minimizes cache mispredictiones
     std::clock_t start_min;
     double dur_min;
 
-    printf ("Running minimum branch miss example...\n");
+    printf ("Running minimum branch misprediction example...\n");
 
     start_min = std::clock();
 
@@ -40,14 +40,14 @@ int main ()
 
     dur_min = (std::clock() - start_min) / (double) CLOCKS_PER_SEC;
 
-    // Maximizes cache misses
+    // Maximizes cache mispredictiones
     std::clock_t start_max;
     double dur_max;
 
     printf ("Sorting vector...\n");
     std::sort(vec, vec + iterations);
 
-    printf ("Running maximum branch miss example...\n");
+    printf ("Running maximum branch misprediction example...\n");
 
     start_max = std::clock();
 
@@ -62,6 +62,6 @@ int main ()
 
     dur_max = (std::clock() - start_max) / (double) CLOCKS_PER_SEC;
 
-    printf ("Minimum branch miss time: %lf s\n", dur_min);
-    printf ("Maximum branch miss time: %lf s\n", dur_max);
+    printf ("Minimum branch misprediction time: %lf s\n", dur_min);
+    printf ("Maximum branch misprediction time: %lf s\n", dur_max);
 }
