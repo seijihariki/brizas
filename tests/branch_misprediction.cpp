@@ -21,7 +21,7 @@ int main ()
 
     uli tmp = 0;
 
-    // Minimizes cache mispredictiones
+    // Minimizes cache mispredictions
     std::clock_t start_min;
     double dur_min;
 
@@ -40,7 +40,7 @@ int main ()
 
     dur_min = (std::clock() - start_min) / (double) CLOCKS_PER_SEC;
 
-    // Maximizes cache mispredictiones
+    // Maximizes cache mispredictions
     std::clock_t start_max;
     double dur_max;
 
