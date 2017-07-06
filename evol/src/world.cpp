@@ -90,11 +90,11 @@ void World::draw(
     sf::Vector2f target_size = target.getView().getSize();
     sf::Vector2f view_top_left =
         target.getView().getCenter() - target_size / 2.f;
-    
+
     sf::Vector2f expected_size = sf::Vector2f(
             target_size.x / w,
             target_size.y / h);
-    
+
     double final_square_size =
         expected_size.x < expected_size.y ? expected_size.x : expected_size.y;
 

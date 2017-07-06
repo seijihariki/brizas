@@ -12,6 +12,8 @@
 #include "graphics/texture.hpp"
 #include "drawable3d.hpp"
 
+typedef unsigned int uint;
+
 float min(float a, float b)
 {
     return a > b?b:a;
@@ -28,6 +30,8 @@ int main()
     sf::ContextSettings settings;
     settings.antialiasingLevel = 4;
     settings.depthBits = 24;
+    settings.majorVersion = 3;
+    settings.minorVersion = 3;
 
     sf::RenderWindow window(sf::VideoMode(800, 600), "Teste", sf::Style::Close, settings);
 
@@ -57,21 +61,21 @@ int main()
     std::vector<unsigned char> pixels;
 
     image.loadFromFile("assets/brick_tex.png");
-    for (int i = 0; i < (image.getSize().x * image.getSize().y * 4); i++)
+    for (uint i = 0; i < (image.getSize().x * image.getSize().y * 4); i++)
         pixels.push_back(image.getPixelsPtr()[i]);
     Texture stone_tex(pixels, image.getSize().x, image.getSize().y);
     stone_tex.loadToGPU();
 
     pixels.clear();
     image.loadFromFile("assets/brick_norm.png");
-    for (int i = 0; i < (image.getSize().x * image.getSize().y * 4); i++)
+    for (uint i = 0; i < (image.getSize().x * image.getSize().y * 4); i++)
         pixels.push_back(image.getPixelsPtr()[i]);
     Texture bump_tex(pixels, image.getSize().x, image.getSize().y);
     bump_tex.loadToGPU();
 
     pixels.clear();
-    image.loadFromFile("assets/cubemap.png");
-    for (int i = 0; i < (image.getSize().x * image.getSize().y * 4); i++)
+    image.loadFromFile("assets/cubemap_night.png");
+    for (uint i = 0; i < (image.getSize().x * image.getSize().y * 4); i++)
         pixels.push_back(image.getPixelsPtr()[i]);
     Texture sky_tex(pixels, image.getSize().x, image.getSize().y);
     sky_tex.loadToGPU();
@@ -93,7 +97,7 @@ int main()
 
     obj = new Drawable_3D(&sky_cube_model, &sky_tex);
     objects.push_back(obj);
-    obj->setScale(glm::vec3(20, 20, 20));
+    obj->setScale(glm::vec3(30, 30, 30));
     obj->setRotation(glm::quat(glm::vec3(-PI/2, 0, 0)));
 
     // Lights
