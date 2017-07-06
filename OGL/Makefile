@@ -3,7 +3,7 @@ CFLAGS=-Wall -std=c++11
 DEBUGF:=-g
 RELEASEF:=-O2
 
-LIBS:=-lsfml-graphics -lsfml-window -lsfml-system -lGL -lGLEW
+LIBS:=-lsfml-graphics -lsfml-window -lsfml-system
 CEXT:=cpp
 HEXT:=hpp
 
@@ -87,6 +87,9 @@ configure: clang
 	@mkdir -p $(EXECSRC)
 	@mkdir -p $(TESTSRC)
 	@mkdir -p $(TESTBIN)
+	@[ ! -h "$(BINDIR)/$(ASTDIR)" ] && ln -s ../$(ASTDIR) $(BINDIR)/$(ASTDIR) || true
+	@[ ! -h "$(TESTBIN)/$(ASTDIR)" ] && ln -s ../$(ASTDIR) $(TESTBIN)/$(ASTDIR) || true
+
 
 clang:
 	@echo "-I$(INCDIR)" > .clang_complete
@@ -159,6 +162,8 @@ $(DEPDIR)/%.d: $(EXECSRC)/%.$(CEXT)
 	$(CC) $(CFLAGS) $< -MM -MT $(OBJDIR)/$(patsubst $(DEPDIR)/%.d,%,$@).o -o $@ -I$(INCDIR)
 
 # Including dependencies
+
+# Helpers
 
 # Upload to git
 
