@@ -29,7 +29,7 @@
 **.exe
 **.out
 **.app
-**/**bin/**
+**/*bin/**
 
 # Python compiled
 **.pyc
