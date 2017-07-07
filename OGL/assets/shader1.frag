@@ -38,6 +38,6 @@ void main(){
     color.r *= texture(text, tex_coords).r;
     color.g *= texture(text, tex_coords).g;
     color.b *= texture(text, tex_coords).b;
-    color = texture(text, tex_coords).rgb;
+    //color = texture(text, tex_coords).rgb;
     color = clamp(color, 0.0, 1.0);
 }
