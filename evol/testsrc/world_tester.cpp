@@ -12,15 +12,17 @@ public:
             for (uint y = 0; y < h; y++)
             {
                 Tile &tile = map[x][y];
-                if ((h - y) <= h / 10.0)
+                if ((h - y) <= h / 10.0 || rand()%100 < 2)
                 {
                     tile.fill_color   = sf::Color(0, 198, 23);
                     tile.border_color = sf::Color(46, 173, 0);
+                    tile.transparency = (rand()%100)/100.0f;
                 }
                 else
                 {
                     tile.fill_color   = sf::Color(89, 213, 255);
                     tile.border_color = sf::Color(89, 172, 255);
+                    tile.transparency = 1;
                 }
             }
         }

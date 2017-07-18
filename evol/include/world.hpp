@@ -10,7 +10,9 @@
 #include <SFML/Graphics.hpp>
 
 #include "typedefs.hpp"
+#include "light.hpp"
 
+class Light;
 
 /*! \struct Tile
  *  \brief Struct that represents an tile in the world.
@@ -26,6 +28,7 @@ struct Tile
     double occupied;        //!< Percentage of volume occupied by solid content
     sf::Color fill_color;   //!< Fill color of the tile
     sf::Color border_color; //!< Border color of the tile
+    double transparency;
 };
 
 
@@ -63,6 +66,7 @@ public:
 
     uint width () const;
     uint height () const;
+    Tile getTile (int x, int y) const;
 
     // Returns the elapsed time since the beginning of the simulation
     sf::Time elapsedTime () const;
@@ -72,6 +76,9 @@ public:
     double dayTime () const;
 
     ~World ();
+
+    std::pair<double, sf::Vector2f>
+        getDrawingProperties(sf::RenderTarget &target) const;
 
 private:
     virtual void draw(sf::RenderTarget& target,
@@ -86,6 +93,8 @@ private:
     sf::Time day_duration;  //!< Duration of a simulation day in real time
     const uint w;           //!< Map width (in tiles)
     const uint h;           //!< Map height (in tiles)
+
+    Light *light;
 };
 
 #endif

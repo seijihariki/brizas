@@ -8,8 +8,9 @@ World::World (
         sf::Time day_duration
         ) :
 
+    day_duration(day_duration),
     w(w), h(h),
-    day_duration(day_duration)
+    light(new Light(this))
 {
     map = new Tile*[w];
     for (uint i = 0; i < w; i++)
@@ -28,6 +29,9 @@ World::~World ()
 
     delete map;
     map = nullptr;
+
+    delete light;
+    light = nullptr;
 }
 
 // Getters
@@ -40,6 +44,11 @@ uint World::width () const
 uint World::height () const
 {
     return h;
+}
+
+Tile World::getTile (int x, int y) const
+{
+    return map[x][y];
 }
 
 sf::Time World::elapsedTime () const
@@ -81,12 +90,9 @@ void World::update ()
     double day_frac = dayTime();
 }
 
-void World::draw(
-        sf::RenderTarget &target,
-        sf::RenderStates states
-        ) const
+std::pair<double, sf::Vector2f>
+    World::getDrawingProperties (sf::RenderTarget &target) const
 {
-    // Calculating necessay info for centralized drawing
     sf::Vector2f target_size = target.getView().getSize();
     sf::Vector2f view_top_left =
         target.getView().getCenter() - target_size / 2.f;
@@ -101,6 +107,22 @@ void World::draw(
     sf::Vector2f initial_coords = sf::Vector2f(
             (target_size.x - final_square_size*w) / 2 + view_top_left.x,
             (target_size.y - final_square_size*h) / 2 + view_top_left.y);
+
+    return std::pair<double, sf::Vector2f> (final_square_size, initial_coords);
+}
+
+void World::draw (
+        sf::RenderTarget &target,
+        sf::RenderStates states
+        ) const
+{
+    // Calculating necessary info for centralized drawing
+    auto properties = getDrawingProperties(target);
+    double final_square_size = properties.first;
+    sf::Vector2f initial_coords = properties.second;
+
+    // Calculating light
+    light->recalculate(final_square_size, initial_coords);
 
     // Now the actual drawing takes place
     sf::RectangleShape tile;
@@ -118,4 +140,15 @@ void World::draw(
             target.draw(tile);
         }
     }
+
+    target.draw(*light);
+
+    // Ambient light
+    sf::RectangleShape ambient;
+    ambient.setSize(sf::Vector2f(target.getSize().x, target.getSize().y));
+    double sine = sin(dayTime()*2*M_PI);
+    int alpha = (1 - (sine < 0 ? 0 : sine))*255;
+    alpha = alpha > 255 ? 255 : alpha < 0 ? 0 : alpha;
+    ambient.setFillColor(sf::Color(0, 0, 0, alpha));
+    target.draw(ambient);
 }
